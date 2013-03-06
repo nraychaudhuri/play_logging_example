@@ -1,0 +1,40 @@
+<configuration>
+    
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.Logger$ColoredLevel" />
+  
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+     <file>${application.home}/logs/application.log</file>
+     <encoder>
+       <pattern>%date - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+     </encoder>
+   </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%coloredLevel %logger{15} - %message%n%xException{5}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="RollingAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${application.home}/logs/anotherLog.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${application.home}/logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender> 
+  
+  <logger name="play" level="INFO" />
+  <logger name="application" level="INFO" />
+
+  <logger name="logging.Appender" level="INFO">
+    <appender-ref ref="RollingAppender"/>
+    <appender-ref ref="STDOUT"/>
+  </logger>  
+
+</configuration>
